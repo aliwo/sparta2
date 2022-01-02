@@ -82,7 +82,7 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "spart",
+        "NAME": "sparta",
         "USER": "root",
         "PASSWORD": "2238047",
         "HOST": "localhost",
