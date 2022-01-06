@@ -2,7 +2,7 @@ from django.db import connection
 from django.test import TestCase
 from django.test.utils import CaptureQueriesContext
 
-from tabom.models import User
+from tabom.models import User, Like
 from tabom.models.article import Article
 from tabom.services.article_service import get_an_article, get_article_list
 from tabom.services.like_service import do_like
@@ -36,7 +36,7 @@ class TestArticleService(TestCase):
         do_like(user.id, articles[-1].id)
 
         # When
-        with CaptureQueriesContext(connection) as ctx:
+        with self.assertNumQueries(2):
             result_articles = get_article_list(0, 10)
             result_counts = [a.like_set.count() for a in result_articles]
 
