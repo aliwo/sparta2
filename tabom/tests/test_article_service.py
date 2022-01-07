@@ -1,8 +1,6 @@
-from django.db import connection
 from django.test import TestCase
-from django.test.utils import CaptureQueriesContext
 
-from tabom.models import User, Like
+from tabom.models import User
 from tabom.models.article import Article
 from tabom.services.article_service import get_an_article, get_article_list
 from tabom.services.like_service import do_like
@@ -36,8 +34,8 @@ class TestArticleService(TestCase):
         do_like(user.id, articles[-1].id)
 
         # When
-        with self.assertNumQueries(2):
-            result_articles = get_article_list(0, 10)
+        with self.assertNumQueries(3):
+            result_articles = get_article_list(user.id, 0, 10)
             result_counts = [a.like_set.count() for a in result_articles]
 
             # Then
@@ -47,3 +45,17 @@ class TestArticleService(TestCase):
                 [a.id for a in reversed(articles[10:21])],
                 [a.id for a in result_articles],
             )
+
+    def test_get_article_list_should_contain_my_like_when_like_exists(self) -> None:
+        # Given
+        user = User.objects.create(name="test_user")
+        article1 = Article.objects.create(title="artice1")
+        like = do_like(user.id, article1.id)
+        Article.objects.create(title="article2")
+
+        # When
+        articles = get_article_list(user.id, 0, 10)
+
+        # Then
+        self.assertEqual(like.id, articles[1].my_likes[0].id)
+        self.assertEqual(0, len(articles[0].my_likes))
