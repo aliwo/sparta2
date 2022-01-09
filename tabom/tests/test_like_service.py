@@ -4,6 +4,7 @@ from django.test import TestCase
 from tabom.models import Like
 from tabom.models.article import Article
 from tabom.models.user import User
+from tabom.services.article_service import create_an_article
 from tabom.services.like_service import do_like, undo_like
 
 
@@ -11,7 +12,7 @@ class TestLikeService(TestCase):
     def test_a_user_can_like_an_article(self) -> None:
         # Given
         user = User.objects.create(name="test")
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
 
         # When
         like = do_like(user.id, article.id)
@@ -24,7 +25,7 @@ class TestLikeService(TestCase):
     def test_a_user_can_like_an_article_only_once(self) -> None:
         # Given
         user = User.objects.create(name="test")
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
 
         # Expect
         do_like(user.id, article.id)
@@ -34,7 +35,7 @@ class TestLikeService(TestCase):
     def test_it_should_raise_exception_when_like_an_user_does_not_exist(self) -> None:
         # Given
         invalid_user_id = 9988
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
 
         # Expect
         with self.assertRaises(IntegrityError):
@@ -52,7 +53,7 @@ class TestLikeService(TestCase):
     def test_like_count_should_increase(self) -> None:
         # Given
         user = User.objects.create(name="test")
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
 
         # When
         do_like(user.id, article.id)
@@ -64,7 +65,7 @@ class TestLikeService(TestCase):
     def test_a_user_can_undo_like(self) -> None:
         # Given
         user = User.objects.create(name="test")
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
         like = do_like(user.id, article.id)
 
         # When
@@ -77,7 +78,7 @@ class TestLikeService(TestCase):
     def test_it_should_raise_exception_when_undo_like_which_does_not_exist(self) -> None:
         # Given
         user = User.objects.create(name="test")
-        article = Article.objects.create(title="test_title")
+        article = create_an_article(title="test_title")
 
         # Expect
         with self.assertRaises(Like.DoesNotExist):
