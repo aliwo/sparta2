@@ -74,12 +74,3 @@ class TestLikeService(TestCase):
         # Then
         with self.assertRaises(Like.DoesNotExist):
             Like.objects.filter(id=like.id).get()
-
-    def test_it_should_raise_exception_when_undo_like_which_does_not_exist(self) -> None:
-        # Given
-        user = User.objects.create(name="test")
-        article = create_an_article(title="test_title")
-
-        # Expect
-        with self.assertRaises(Like.DoesNotExist):
-            undo_like(user.id, article.id)
