@@ -6,5 +6,4 @@ def do_like(user_id: int, article_id: int) -> Like:
 
 
 def undo_like(user_id: int, article_id: int) -> None:
-    like = Like.objects.get(user_id=user_id, article_id=article_id)
-    like.delete()
+    Like.objects.filter(user_id=user_id, article_id=article_id).delete()
