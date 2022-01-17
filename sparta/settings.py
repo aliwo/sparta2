@@ -81,6 +81,7 @@ pymysql.install_as_MySQLdb()
 
 DATABASES = {
     "default": {
+        "ATOMIC_REQUESTS": True,  # TODO: 이거 추가해야한다고 말해주어야 합니다.
         "ENGINE": "django.db.backends.mysql",
         "NAME": "sparta",
         "USER": "root",
