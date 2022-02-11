@@ -24,8 +24,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: false
+#        with:
+#          limit-access-to-actor: false
 
       # Start Mysql
       # https://ovirium.com/blog/how-to-make-mysql-work-in-your-github-actions/
